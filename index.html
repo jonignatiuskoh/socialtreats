@@ -1,82 +1,127 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Social Treats Sticker App</title>
+  <title>Order Your Drink</title>
   <style>
     body {
       font-family: 'Futura', sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .sticker {
-      width: 200px;
-      height: 120px;
-      border: 1px solid #000;
-      margin: 20px auto;
-      padding: 10px;
-      font-size: 14px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      padding: 1rem;
     }
-    .logo {
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    #sticker-preview {
+      margin-top: 2rem;
+      border: 1px dashed #aaa;
+      padding: 1rem;
+      width: 200px;
+      height: 120px;
+      text-align: center;
+      display: none;
+    }
+
+    #sticker-preview img {
       max-height: 30px;
-      margin-bottom: 5px;
+      margin-bottom: 0.5rem;
+    }
+
+    #confirm-print {
+      margin-top: 1rem;
+      display: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
-  <h1>Social Treats</h1>
-  <div class="form-group">
-    <label for="customerName">Your Name:</label>
-    <input type="text" id="customerName" />
-  </div>
-  <div class="form-group">
-    <label for="drink">Drink:</label>
-    <select id="drink">
-      <option value="White">White</option>
-      <option value="Black">Black</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="temperature">Temperature:</label>
-    <select id="temperature">
-      <option value="Hot">Hot</option>
-      <option value="Iced">Iced</option>
-    </select>
-  </div>
-  <button onclick="generateSticker()">Print Sticker</button>
+  <h1>ORDER YOUR DRINK</h1>
 
-  <div id="stickerPreview" class="sticker" style="display:none;">
-    <img src="logo.png" alt="Logo" class="logo" />
-    <div id="previewName"></div>
-    <div id="previewDrink"></div>
-    <div id="previewTime"></div>
+  <form id="order-form">
+    <label>
+      Your Name:
+      <input type="text" id="name" required />
+    </label>
+
+    <label>
+      Drink Type:
+      <select id="drink" required>
+        <option value="White">White</option>
+        <option value="Black">Black</option>
+      </select>
+    </label>
+
+    <label>
+      Temperature:
+      <select id="temp" required>
+        <option value="Hot">Hot</option>
+        <option value="Iced">Iced</option>
+      </select>
+    </label>
+
+    <button type="submit">Preview Sticker</button>
+  </form>
+
+  <div id="sticker-preview">
+    <img src="logo.png" alt="Logo" />
+    <div id="sticker-content"></div>
   </div>
+
+  <button id="confirm-print">Confirm & Order</button>
 
   <script>
-    function generateSticker() {
-      const name = document.getElementById('customerName').value;
-      const drink = document.getElementById('drink').value;
-      const temperature = document.getElementById('temperature').value;
-      const now = new Date();
-      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const form = document.getElementById("order-form");
+    const content = document.getElementById("sticker-content");
+    const preview = document.getElementById("sticker-preview");
+    const printButton = document.getElementById("confirm-print");
 
-      document.getElementById('previewName').textContent = name;
-      document.getElementById('previewDrink').textContent = `${temperature} ${drink}`;
-      document.getElementById('previewTime').textContent = time;
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const drink = document.getElementById("drink").value;
+      const temp = document.getElementById("temp").value;
+      const time = new Date().toLocaleTimeString();
 
-      document.getElementById('stickerPreview').style.display = 'block';
+      content.innerHTML = `
+        <strong>${name}</strong><br/>
+        ${temp} ${drink}<br/>
+        <small>${time}</small>
+      `;
 
-      setTimeout(() => window.print(), 500);
-    }
+      preview.style.display = "block";
+      printButton.style.display = "inline-block";
+    });
+
+    printButton.addEventListener("click", () => {
+      window.print();
+    });
   </script>
 </body>
 </html>
