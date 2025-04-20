@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Social Treats Sticker App</title>
+  <style>
+    body {
+      font-family: 'Futura', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .sticker {
+      width: 200px;
+      height: 120px;
+      border: 1px solid #000;
+      margin: 20px auto;
+      padding: 10px;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .logo {
+      max-height: 30px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Social Treats</h1>
+  <div class="form-group">
+    <label for="customerName">Your Name:</label>
+    <input type="text" id="customerName" />
+  </div>
+  <div class="form-group">
+    <label for="drink">Drink:</label>
+    <select id="drink">
+      <option value="White">White</option>
+      <option value="Black">Black</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="temperature">Temperature:</label>
+    <select id="temperature">
+      <option value="Hot">Hot</option>
+      <option value="Iced">Iced</option>
+    </select>
+  </div>
+  <button onclick="generateSticker()">Print Sticker</button>
+
+  <div id="stickerPreview" class="sticker" style="display:none;">
+    <img src="logo.png" alt="Logo" class="logo" />
+    <div id="previewName"></div>
+    <div id="previewDrink"></div>
+    <div id="previewTime"></div>
+  </div>
+
+  <script>
+    function generateSticker() {
+      const name = document.getElementById('customerName').value;
+      const drink = document.getElementById('drink').value;
+      const temperature = document.getElementById('temperature').value;
+      const now = new Date();
+      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      document.getElementById('previewName').textContent = name;
+      document.getElementById('previewDrink').textContent = `${temperature} ${drink}`;
+      document.getElementById('previewTime').textContent = time;
+
+      document.getElementById('stickerPreview').style.display = 'block';
+
+      setTimeout(() => window.print(), 500);
+    }
+  </script>
+</body>
+</html>
